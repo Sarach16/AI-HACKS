@@ -13,6 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
+    "@arizeai/openinference-instrumentation-anthropic": "^0.1.13",
+    "@arizeai/openinference-semantic-conventions": "^2.5.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.219.0",
+    "@opentelemetry/sdk-node": "^0.219.0",
+    "@opentelemetry/sdk-trace-node": "^2.8.0",
+    "@opentelemetry/semantic-conventions": "^1.41.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
