@@ -1,0 +1,315 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Space+Mono:wght@400;700&display=swap");
+
+:root {
+  /* Terrain-derived palette: ink on aged paper, moss + clay accents */
+  --paper: #ede7d9;
+  --paper-deep: #e1d9c4;
+  --ink: #2b2a25;
+  --ink-soft: #5c594c;
+  --moss: #4a5d3a;
+  --moss-bright: #6b8a4f;
+  --clay: #b3542e;
+  --line: #c9bfa4;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono: "Space Mono", "SFMono-Regular", monospace;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(74, 93, 58, 0.06), transparent 45%),
+    radial-gradient(circle at 85% 92%, rgba(179, 84, 46, 0.05), transparent 50%),
+    var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 6rem;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ---------- Header ---------- */
+
+.app__header {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1.5rem;
+}
+
+.app__eyebrow {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--moss);
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+.app__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 8vw, 3.2rem);
+  line-height: 1;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.app__subtitle {
+  font-style: italic;
+  font-family: var(--font-display);
+  color: var(--ink-soft);
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+/* ---------- Stage (current status / narration) ---------- */
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+  padding: 2rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  position: relative;
+}
+
+/* signature element: a topographic pulse standing in for "the guide is listening" */
+.pulse {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulse__core {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ink-soft);
+  transition: background 0.4s ease;
+}
+
+.pulse__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  opacity: 0;
+}
+
+.pulse--active .pulse__core {
+  background: var(--clay);
+}
+
+.pulse--active .pulse__ring {
+  border-color: var(--clay);
+  animation: ripple 2.2s ease-out infinite;
+}
+
+.pulse--active .pulse__ring:nth-child(2) {
+  animation-delay: 0.9s;
+}
+
+.pulse--speaking .pulse__core {
+  background: var(--moss-bright);
+}
+
+.pulse--speaking .pulse__ring {
+  border-color: var(--moss-bright);
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.stage__status {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.stage__hint {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--ink-soft);
+  max-width: 32ch;
+  margin: 0;
+}
+
+.stage__hint-small {
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.stage__error {
+  color: var(--clay);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.stage__force-btn {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.stage__force-btn:hover:not(:disabled) {
+  border-color: var(--moss);
+  color: var(--moss);
+}
+
+.stage__force-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ---------- Now narrating ---------- */
+
+.now-narrating {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 46ch;
+}
+
+.now-narrating__label {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--moss);
+  font-weight: 700;
+}
+
+.now-narrating__title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.now-narrating__script {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ---------- Trail (history) ---------- */
+
+.trail__heading {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.trail__empty {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-style: italic;
+  font-family: var(--font-display);
+}
+
+.trail__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.trail__item {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.trail__time {
+  color: var(--clay);
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  width: 4.5em;
+}
+
+.trail__name {
+  color: var(--ink);
+}
+
+/* ---------- Coordinates footer ---------- */
+
+.coords {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  background: var(--paper-deep);
+  border-top: 1px solid var(--line);
+  padding: 0.6rem;
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .app {
+    padding-top: 4rem;
+  }
+}
